@@ -5,7 +5,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 # Demo
 
-A demo can be seen [here](https://lodela.github.io/primeNg_Table_stickyHeader/).
+A demo can be seen [here](https://lodela.github.io/primeNg_Table_stickyHeader/){:target="_blank"}.
 
 # API
 
@@ -13,7 +13,7 @@ The directive accepts 2 attributes:
 
 **stickyTop (number):** Number of pixels from the window top after which the header becomes sticky. Default is 0.
 
-**columnWidth (object):** An optional Column Width. You can set up the width of a specific column, starting from cero, let's say the first column is cero and so on...  ie. {'0':50, 1:150, 3:350, all:250}. You must *at least* indicate the *all* width for **all columns** in order to make the directive work correctly... **note:** if you don't declare the *all* width, the scroll bar will never show up... 
+**columnWidth (object):** An optional Column Width. You can set up the width of a specific column, starting from cero, let's say the first column is cero and so on...  ie. {'0':50, 1:150, 3:350, all:250}. You must _at least_ indicate the _**all**_ width for **all columns** in order to make the directive work correctly... **note:** if you don't declare the *all* width, the scroll bar will never show up...
 
 ## Development server
 
