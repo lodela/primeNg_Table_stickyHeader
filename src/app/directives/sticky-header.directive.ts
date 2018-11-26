@@ -1,4 +1,5 @@
-import { Directive, ElementRef, AfterViewInit, Input, HostListener, Renderer2 } from '@angular/core';
+import { Directive, Inject, ElementRef, AfterViewInit, Input, HostListener, Renderer2, ViewChild,ViewContainerRef } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { ColsMetrics } from '../models/bodyColsMetrics.model';
 enum StickyState{
   fixed   = "fixed",
@@ -23,13 +24,16 @@ export class StickyHeaderDirective implements AfterViewInit{
   @Input('stickyTop') public stickyTop:number = 0;
   @Input('columnWidth') public columnWidth: ColsMetrics;
 
+
   constructor(
     private element:ElementRef,
-    private renderer:Renderer2
+    private renderer:Renderer2,
   ) {}
 
   ngAfterViewInit():void{
+
     setTimeout(()=>{
+
       this.headers   = this.element.nativeElement.getElementsByTagName('TR');
       this.hasHeader = this.headers.length > 0;
 
@@ -40,7 +44,8 @@ export class StickyHeaderDirective implements AfterViewInit{
         this.headerTop     = Math.round(this.header.getBoundingClientRect().top);
         this.callFixed     = Math.round(this.headerTop - this.stickyTop + window.pageYOffset);
         this.colElements   = this.element.nativeElement.getElementsByTagName('COL');
-        this.setBodyColumns(this.colElements);
+
+        this.setBodyColumns();
         this.setColumnWidth();
       }
     },0);
@@ -69,20 +74,40 @@ export class StickyHeaderDirective implements AfterViewInit{
     }
     return width;
   }
-  private setBodyColumns(element):boolean{
-    var bodyColumns = (element.length/2);
-    for(var i in this.columnWidth){
-      if(undefined == this.bodyColsMetrics[i]){
-        this.bodyColsMetrics[i] = this.columnWidth[i]
-      }else{this.bodyColsMetrics[i] = this.columnWidth[i]}
-      if(i != 'all'){
-        var bodyColumn = bodyColumns+parseInt(i);
-        if(undefined == this.bodyColsMetrics[bodyColumn]){
-          this.bodyColsMetrics[bodyColumn] = this.columnWidth[i];
+  private setBodyColumns():boolean{
+
+    if(this.colConstructor()){
+      var bodyColumns = (this.colElements.length/2);
+      for(var i in this.columnWidth){
+        if(undefined == this.bodyColsMetrics[i]){
+          this.bodyColsMetrics[i] = this.columnWidth[i]
+        }else{this.bodyColsMetrics[i] = this.columnWidth[i]}
+        if(i != 'all'){
+          var bodyColumn = bodyColumns+parseInt(i);
+          if(undefined == this.bodyColsMetrics[bodyColumn]){
+            this.bodyColsMetrics[bodyColumn] = this.columnWidth[i];
+          }
         }
       }
+      return true;
+    }else{
+      return false;
     }
-    return true;
+  }
+  private colConstructor():boolean{
+    let reqCols  = this.header.getElementsByTagName('TH').length;
+    let actlCols = this.colElements.length/2;
+    let mzngCols = reqCols - actlCols;
+    let colgroup = this.element.nativeElement.getElementsByTagName('COLGROUP');
+    for(let e = 0; e< mzngCols; e++){
+      for(let i=0; i<2; i++){
+        var col = this.renderer.createElement('col');
+        this.renderer.addClass(col, 'ng-star-inserted');
+        this.renderer.appendChild(colgroup[i], col);
+      }
+    }
+    let ret:boolean = (reqCols == colgroup[1].children.length)?true:false;
+    return ret;
   }
   private setColumnWidth():void{
     let width = `${this.bodyColsMetrics.all}px`;
