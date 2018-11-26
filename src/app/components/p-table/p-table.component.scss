@@ -1,0 +1,55 @@
+.tableContainer{
+  overflow: hidden;
+}
+:host /deep/ .ui-table{
+    .ui-table-caption{
+      border:solid 1px transparent;
+
+      .globalFilter{
+        position: relative;
+        float: right;
+      }
+    }
+    thead{
+      tr{
+        th{
+          height:57.78px !important;
+        }
+      }
+    }
+    tbody{
+      tr{
+        td{
+          &:first-child{
+            text-align: center;
+          }
+        }
+      }
+    }
+}
+.bottomThing{
+  border:solid 1px red;
+  width: 200px;
+  height: 150px;
+  display:block;
+
+  -webkit-transition: all 0.35s ease-in-out;
+  -moz-transition: all 0.35s ease-in-out;
+  -ms-transition: all 0.35s ease-in-out;
+  -o-transition: all 0.35s ease-in-out;
+  transition: all 0.35s ease-in-out;
+
+  &.fixed{
+    position: fixed;
+    width: 98%;
+    background:blue;
+    bottom:2%;
+    left:1%;
+
+    -webkit-transition: all 0.35s ease-in-out;
+    -moz-transition: all 0.35s ease-in-out;
+    -ms-transition: all 0.35s ease-in-out;
+    -o-transition: all 0.35s ease-in-out;
+    transition: all 0.35s ease-in-out;
+  }
+}

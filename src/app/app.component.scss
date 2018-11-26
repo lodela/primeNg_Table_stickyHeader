@@ -1,0 +1,15 @@
+.fixed{
+  position: sticky;
+  height: 200px;
+  top:0;
+  background: white;
+  border:solid 1px gray;
+  border-width: 0 0 1px 0;
+  display: block;
+  z-index: 1;
+
+  h1,h2,h3,h4,h5{
+    width: 100%;
+    text-align: center;
+  }
+}

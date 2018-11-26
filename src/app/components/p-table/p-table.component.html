@@ -1,0 +1,49 @@
+<!-- selected: {{selectedClient | json}} -->
+<div class="tableContainer container-fluid">
+  <p-table [columns]="colsClients" [value]="clients"
+           [paginator]="true" [rows]="20" [first]="first" [rowsPerPageOptions]="[20,50,100]"
+           selectionMode="single" [(selection)]="selectedClient"
+           [scrollable]="true" [resizableColumns]="true"
+           tableStickyHeader [stickyTop]="200" [columnWidth]="{'0':50,'2':350,all:250}">
+
+    <ng-template pTemplate="caption">
+      <div class="ui-helper-clearfix">
+        <button type="button" pButton icon="fa fa-file-excel-o" iconPos="left" label="Export All Data" (click)="exportCSV()" style="float:left; margin-right:10px;"></button>
+        <button type="button" pButton icon="fa fa-file" iconPos="left" label="Export Selection Only" [disabled]="!selectedClient" (click)="exportCSV({selectionOnly:true,client:selectedClient})" style="float:left"></button>
+        <div class="globalFilter">
+          <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+          <input type="text" pInputText size="50" placeholder="Global Filter" (input)="tt.filterGlobal($event.target.value, 'contains')">
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="colgroup" let-columns>
+      <colgroup>
+        <col *ngFor="let col of columns" style="width:250px">
+      </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th></th>
+        <th *ngFor="let col of columns" [pSortableColumn]="col">
+          {{col}}
+          <p-sortIcon [field]="col.field"></p-sortIcon>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr>
+        <td>
+          <p-tableRadioButton [value]="rowData"></p-tableRadioButton>
+        </td>
+        <td *ngFor="let col of columns">
+          {{rowData[col]}}
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      There are {{clients?.length}} clients total
+    </ng-template>
+  </p-table>
+</div>
+<!-- <div class="bottomThing" appStickyBelowView></div> -->
