@@ -15,6 +15,10 @@ The directive accepts 2 attributes:
 
 **columnWidth (object):** An optional Column Width. You can set up the width of a specific column, starting from cero, let's say the first column is cero and so on...  ie. {'0':50, 1:150, 3:350, all:250}. You must _at least_ indicate the _**all**_ width for **all columns** in order to make the directive work correctly... **note:** if you don't declare the *all* width, the scroll bar will never show up...
 
+## Usage img
+
+![usage](https://github.com/lodela/primeNg_Table_stickyHeader/blob/master/docs/assets/imgs/usage.jpg)
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
