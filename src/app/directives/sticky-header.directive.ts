@@ -77,7 +77,8 @@ export class StickyHeaderDirective implements AfterViewInit{
   private setBodyColumns():boolean{
 
     if(this.colConstructor()){
-      var bodyColumns = (this.colElements.length/2);
+      let colgroup = this.element.nativeElement.getElementsByTagName('COLGROUP');
+      var bodyColumns = (colgroup[0].children.length);
       for(var i in this.columnWidth){
         if(undefined == this.bodyColsMetrics[i]){
           this.bodyColsMetrics[i] = this.columnWidth[i]
@@ -95,10 +96,11 @@ export class StickyHeaderDirective implements AfterViewInit{
     }
   }
   private colConstructor():boolean{
-    let reqCols  = this.header.getElementsByTagName('TH').length;
-    let actlCols = this.colElements.length/2;
-    let mzngCols = reqCols - actlCols;
     let colgroup = this.element.nativeElement.getElementsByTagName('COLGROUP');
+    let reqCols  = this.header.getElementsByTagName('TH').length;
+    let actlCols = colgroup[0].children.length;
+    let mzngCols = reqCols - actlCols;
+
     for(let e = 0; e< mzngCols; e++){
       for(let i=0; i<2; i++){
         var col = this.renderer.createElement('col');
