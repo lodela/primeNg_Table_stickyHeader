@@ -1,10 +1,10 @@
-<!-- selected: {{selectedClient | json}} -->
+selected: {{selectedClient | json}}
 <div class="tableContainer container-fluid">
-  <p-table [columns]="colsClients" [value]="clients"
-           [paginator]="true" [rows]="20" [first]="first" [rowsPerPageOptions]="[20,50,100]"
+  <p-table [columns]="cols" [value]="clientsData"
+           [paginator]="true" [rows]="20" [rowsPerPageOptions]="[20,50,100]"
            selectionMode="single" [(selection)]="selectedClient"
-           [scrollable]="true" [resizableColumns]="true"
-           tableStickyHeader [stickyTop]="200" [columnWidth]="{'0':50,'2':350,all:250}">
+           [scrollable]="true"
+           tableStickyHeader [stickyTop]="200" [columnWidth]="{'0':50,'2':350,'12':400,all:250}">
 
     <ng-template pTemplate="caption">
       <div class="ui-helper-clearfix">
@@ -19,16 +19,17 @@
 
     <ng-template pTemplate="colgroup" let-columns>
       <colgroup>
-        <col *ngFor="let col of columns" style="width:250px">
+        <col *ngFor="let col of columns">
       </colgroup>
     </ng-template>
     <ng-template pTemplate="header" let-columns>
       <tr>
         <th></th>
-        <th *ngFor="let col of columns" [pSortableColumn]="col">
-          {{col}}
+        <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+          {{col.header}}
           <p-sortIcon [field]="col.field"></p-sortIcon>
         </th>
+        <th>delete</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-columns="columns">
@@ -37,12 +38,15 @@
           <p-tableRadioButton [value]="rowData"></p-tableRadioButton>
         </td>
         <td *ngFor="let col of columns">
-          {{rowData[col]}}
+          {{rowData[col.field]}}
+        </td>
+        <td>
+          <button type="button" pButton icon="fa fa-trash" label="Delete"></button>
         </td>
       </tr>
     </ng-template>
     <ng-template pTemplate="summary">
-      There are {{clients?.length}} clients total
+      There are {{clientsData?.length}} clients total
     </ng-template>
   </p-table>
 </div>

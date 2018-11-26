@@ -7,7 +7,7 @@ import { Clients } from '../models/clients.model';
 })
 export class ClientsService {
   constructor(private http:HttpClient) { }
-  getClients(){
+  getClientsData(){
     return this.http.get<any>('assets/showcases/data/clients-full.json')
                     .toPromise()
                     .then(res => <Clients[]> res.data)

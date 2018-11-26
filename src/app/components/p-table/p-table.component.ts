@@ -1,15 +1,8 @@
-import { Component, ViewEncapsulation, OnInit, Directive, ElementRef, Renderer2, Inject, PLATFORM_ID } from '@angular/core';
-import { Car } from '../../models/car.model';
-import { Todos } from '../../models/todos.model';
+import { Component, ViewEncapsulation, OnInit, Directive } from '@angular/core';
+
 import { Clients } from '../../models/clients.model';
-
-import { CarService } from '../../services/car.service';
-// import { TodosService } from '../../services/todos.service';
 import { ClientsService } from '../../services/clients.service';
-import { WindowScrollService } from '../../services/window-scroll.service';
 
-import { isPlatformBrowser } from '@angular/common';
-import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'pTable',
@@ -18,49 +11,34 @@ import { Observable, Subscription } from 'rxjs';
   styleUrls: ['./p-table.component.scss']
 })
 export class PTableComponent implements OnInit {
-  cars: Car[];
-  todos: Todos[];
-  clients: Clients[];
-  colsClients: Clients[];
+
+  clientsData: Clients[];
   cols:any[];
 
   first: number = 0;
   selectedClient: Clients[];
 
-  public scrollSubscription:Subscription = null;
-
-  constructor(
-    private carService:CarService,
-    // private todosService:TodosService,
-    private clientsService: ClientsService,
-    private windowScrollService: WindowScrollService,
-
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private windowScroll:WindowScrollService,
-    private element: ElementRef,
-    private renderer:Renderer2,
-  ) {
-    this.initScrollState();
-  }
-  public initScrollState(){
-    if(isPlatformBrowser(this.platformId)){
-      this.scrollSubscription = this.windowScroll.scroll$.subscribe(this.handleScroll.bind(this));
-    }
-  }
-  private handleScroll(currentScroll){
-    // console.log(currentScroll);
-  }
+  constructor(private clientsService: ClientsService) {}
   ngOnInit() {
-    this.carService.getCarsSmall().then(cars =>{this.cars = cars});
-    // this.todosService.getToDos().then(todos =>{this.todos = todos});
-    this.clientsService.getClients().then(clients =>{this.clients = clients});
-    this.clientsService.getCols().then(cols => {this.colsClients = cols} );
-
+    this.getClientService();
+  }
+  private getClientService(){
+    this.clientsService.getClientsData().then(cols => {this.clientsData = cols} );
     this.cols = [
-      {field:'color', header:'colores'},
-      {field:'vin', header:'VehicleIdentficationNumber'},
-      {field:'year', header:'year'},
-      {field:'brand', header:'brand'}
+      {field:'name',header:'name'},
+      {field:'email',header:'email'},
+      {field:'company',header:'company'},
+      {field:'personalNumber',header:'personalNumber'},
+      {field:'corporateNumber',header:'corporateNumber'},
+      {field:'country',header:'country'},
+      {field:'city',header:'city'},
+      {field:'zipCode',header:'zipCode'},
+      {field:'PIN',header:'PIN'},
+      {field:'CVV',header:'CVV'},
+      {field:'SIREN',header:'SIREN'},
+      {field:'trackNo',header:'trackNo'},
+      {field:'PAN',header:'PAN'},
+      {field:'tree',header:'tree'},
     ]
   }
   reset() {
