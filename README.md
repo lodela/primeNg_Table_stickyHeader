@@ -2,6 +2,18 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.2.2.
 
+# Demo
+
+A demo can be seen [here](https://amirch1.github.io/primeng-datatable-sticky-header).
+
+# API
+
+The directive accepts 2 attributes:
+
+**stickyTop (number):** Number of pixels from the window top after which the header becomes sticky. Default is 0.
+
+**stickyClass (string):** An optional class name that is added to the header when it is sticky allowing additional styling in sticky mode.
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
