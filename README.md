@@ -5,7 +5,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 # Demo
 
-A demo can be seen [here](https://lodela.github.io/primeNg_Table_stickyHeader/){:target="_blank"}.
+A demo can be seen [here](https://lodela.github.io/primeNg_Table_stickyHeader/).
 
 # API
 
