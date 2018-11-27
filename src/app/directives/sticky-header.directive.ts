@@ -40,15 +40,38 @@ export class StickyHeaderDirective implements AfterViewInit{
       if(this.hasHeader){
         this.header        = this.headers[0];
         this.childEleCount = this.header.childElementCount;
+
         this.tableWidth    = (this.columnWidth)? this.setWidth(this.columnWidth, this.childEleCount): 0;
         this.headerTop     = Math.round(this.header.getBoundingClientRect().top);
         this.callFixed     = Math.round(this.headerTop - this.stickyTop + window.pageYOffset);
         this.colElements   = this.element.nativeElement.getElementsByTagName('COL');
 
-        this.setBodyColumns();
-        this.setColumnWidth();
+        if(Object.keys(this.colElements).length == 0){
+          this.makeColumns();
+        }else{
+          this.setBodyColumns();
+          this.setColumnWidth();
+        }
+
       }
     },0);
+  }
+  private makeColumns(){
+    let table = this.element.nativeElement.getElementsByTagName('TABLE');
+    for(let i=0; i<table.length; i++){
+      var colgroup = this.renderer.createElement('colgroup');
+      var col      = this.renderer.createElement('col');
+
+      this.renderer.addClass(colgroup, 'ng-star-inserted');
+      this.renderer.addClass(col, 'ng-star-inserted');
+      this.renderer.appendChild(colgroup, col);
+
+      this.renderer.appendChild(table[i],colgroup);
+    }
+    if(Object.keys(this.colElements).length >= 2){
+      this.setBodyColumns();
+      this.setColumnWidth();
+    }
   }
   private setWidth(metrics:object, count:number):number{
     let width:number = 0;

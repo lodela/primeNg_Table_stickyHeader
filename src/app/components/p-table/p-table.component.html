@@ -4,7 +4,7 @@ selected: {{selectedClient | json}}
            [paginator]="true" [rows]="20" [rowsPerPageOptions]="[20,50,100]"
            selectionMode="single" [(selection)]="selectedClient"
            [scrollable]="true"
-           tableStickyHeader [stickyTop]="200" [columnWidth]="{'0':50,'2':350,'12':400,all:250}">
+           tableStickyHeader [stickyTop]="200" [columnWidth]="{'0':50,'3':350,'12':400,'14':100,'15':120,all:250}">
 
     <ng-template pTemplate="caption">
       <div class="ui-helper-clearfix">
@@ -16,12 +16,16 @@ selected: {{selectedClient | json}}
         </div>
       </div>
     </ng-template>
+    <!--Important NOTE:
+        the table can have the template colgroup declared in the view ...
+        but it is not required by the directive -->
 
-    <ng-template pTemplate="colgroup" let-columns>
+    <!-- <ng-template pTemplate="colgroup" let-columns>
       <colgroup>
         <col *ngFor="let col of columns">
       </colgroup>
-    </ng-template>
+    </ng-template> -->
+
     <ng-template pTemplate="header" let-columns>
       <tr>
         <th></th>
