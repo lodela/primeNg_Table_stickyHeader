@@ -26,10 +26,14 @@ export class PTableComponent implements OnInit {
     this.clientsService.getClientsData().then(cols => {this.clientsData = cols} );
     this.cols = [
       {field:'name',header:'name'},
+      {field:'corporateNumber',header:'Corp. Phone No.'},
       {field:'email',header:'email'},
+
+      {field:'personalNumber',header:'Phone Number'},
+
       {field:'company',header:'company'},
-      {field:'personalNumber',header:'personalNumber'},
-      {field:'corporateNumber',header:'corporateNumber'},
+
+
       {field:'country',header:'country'},
       {field:'city',header:'city'},
       {field:'zipCode',header:'zipCode'},
