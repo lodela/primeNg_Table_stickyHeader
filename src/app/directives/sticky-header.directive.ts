@@ -46,7 +46,7 @@ export class StickyHeaderDirective implements AfterViewInit{
         this.callFixed     = Math.round(this.headerTop - this.stickyTop + window.pageYOffset);
         this.colElements   = this.element.nativeElement.getElementsByTagName('COL');
 
-        if(!this.colElements.length){
+        if(Object.keys(this.colElements).length == 0){
           this.makeColumns();
         }else{
           this.setBodyColumns();
@@ -68,7 +68,7 @@ export class StickyHeaderDirective implements AfterViewInit{
 
       this.renderer.appendChild(table[i],colgroup);
     }
-    if(this.colElements.length >= 2){
+    if(Object.keys(this.colElements).length >= 2){
       this.setBodyColumns();
       this.setColumnWidth();
     }
