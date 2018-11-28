@@ -23,6 +23,7 @@ export class StickyHeaderDirective implements AfterViewInit{
 
   @Input('stickyTop') public stickyTop:number = 0;
   @Input('columnWidth') public columnWidth: ColsMetrics;
+  @Input('scrollable') public scrollable:boolean;
 
 
   constructor(
@@ -31,7 +32,6 @@ export class StickyHeaderDirective implements AfterViewInit{
   ) {}
 
   ngAfterViewInit():void{
-
     setTimeout(()=>{
 
       this.headers   = this.element.nativeElement.getElementsByTagName('TR');
@@ -46,13 +46,14 @@ export class StickyHeaderDirective implements AfterViewInit{
         this.callFixed     = Math.round(this.headerTop - this.stickyTop + window.pageYOffset);
         this.colElements   = this.element.nativeElement.getElementsByTagName('COL');
 
-        if(Object.keys(this.colElements).length == 0){
-          this.makeColumns();
-        }else{
-          this.setBodyColumns();
-          this.setColumnWidth();
+        if(this.scrollable){
+          if(Object.keys(this.colElements).length == 0){
+            this.makeColumns();
+          }else{
+            this.setBodyColumns();
+            this.setColumnWidth();
+          }
         }
-
       }
     },0);
   }
@@ -141,7 +142,7 @@ export class StickyHeaderDirective implements AfterViewInit{
   @HostListener("window:scroll", ['$event'])
   private handleScroll($event:Event){
     this.scroll = Math.round($event.srcElement.children[0].scrollTop);
-    if(this.hasHeader){
+    if(this.hasHeader && this.scrollable){
       if(this.scroll >= this.callFixed){
         (this.fixedState == StickyState.noFixed)?this.setSticky():'';
       }else{
