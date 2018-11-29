@@ -9,6 +9,7 @@ enum StickyState{
   selector: '[tableStickyHeader]'
 })
 export class StickyHeaderDirective implements AfterViewInit{
+  public innerWidth:number = 0;
   private fixedState = StickyState.noFixed;
   private scroll:number = 0;
   private headers:any[];
@@ -32,6 +33,9 @@ export class StickyHeaderDirective implements AfterViewInit{
   ) {}
 
   ngAfterViewInit():void{
+    this.innerWidth = window.innerWidth;
+    console.log('que chow?');
+    console.log(this.innerWidth);
     setTimeout(()=>{
 
       this.headers   = this.element.nativeElement.getElementsByTagName('TR');
