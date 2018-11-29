@@ -9,7 +9,7 @@ enum StickyState{
   selector: '[tableStickyHeader]'
 })
 export class StickyHeaderDirective implements AfterViewInit{
-  public innerWidth:number = 0;
+  private innerWidth:number = 0;
   private fixedState = StickyState.noFixed;
   private scroll:number = 0;
   private headers:any[];
@@ -37,6 +37,7 @@ export class StickyHeaderDirective implements AfterViewInit{
     console.log('que chow?');
     console.log(this.innerWidth);
     setTimeout(()=>{
+      this.windowWidth = window.innerWidth;
 
       this.headers   = this.element.nativeElement.getElementsByTagName('TR');
       this.hasHeader = this.headers.length > 0;
@@ -52,6 +53,8 @@ export class StickyHeaderDirective implements AfterViewInit{
 
         if(this.scrollable){
           if(Object.keys(this.colElements).length == 0){
+            console.log('initial width:',this.windowWidth);
+            console.log('tableWidth: ',this.tableWidth);
             this.makeColumns();
           }else{
             this.setBodyColumns();
@@ -142,6 +145,12 @@ export class StickyHeaderDirective implements AfterViewInit{
   private setColumnWidth():void{
     let width = `${this.bodyColsMetrics.all}px`;
     this.setStyleAttribute(this.colElements, {'width': width}, this.bodyColsMetrics);
+  }
+  @HostListener('window:resize', ['$event'])
+  private onResize(event) {
+    this.windowWidth = window.innerWidth;
+    console.log('onResize width:',this.windowWidth);
+    console.log('tableWidth: ',this.tableWidth);
   }
   @HostListener("window:scroll", ['$event'])
   private handleScroll($event:Event){
