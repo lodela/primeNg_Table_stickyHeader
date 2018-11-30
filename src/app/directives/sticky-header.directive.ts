@@ -24,8 +24,6 @@ export class StickyHeaderDirective implements AfterViewInit{
   private headerTop:number = 0;
   private callFixed:number = 0;
 
-
-
   @Input('stickyTop') public stickyTop:number = 0;
   @Input('columnWidth') public columnWidth: ColsMetrics;
   @Input('scrollable') public scrollable:boolean;
@@ -91,7 +89,7 @@ export class StickyHeaderDirective implements AfterViewInit{
     let tableRow = this.headers;
     this.trWidth = `${tableWidth-this.childEleCount}px`;
     for(let i in tableRow[1].children){
-      console.log(tableRow[1].children[i]);
+      console.log(this.headers);
     }
     for(let i in tableRow){
       let trElement = tableRow[i];
