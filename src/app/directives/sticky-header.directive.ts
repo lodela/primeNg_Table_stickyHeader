@@ -10,6 +10,7 @@ enum StickyState{
 })
 export class StickyHeaderDirective implements AfterViewInit{
   private innerWidth:number = 0;
+  private isBigger:boolean = false;
   private fixedState = StickyState.noFixed;
   private scroll:number = 0;
   private headers:any[];
@@ -17,15 +18,17 @@ export class StickyHeaderDirective implements AfterViewInit{
   private colElements:HTMLElement;
   private bodyColsMetrics ={all:0};
   private tableWidth:number = 0;
+  private trWidth:string = '0px';
   private hasHeader: boolean = false;
   private header;
   private headerTop:number = 0;
   private callFixed:number = 0;
 
+
+
   @Input('stickyTop') public stickyTop:number = 0;
   @Input('columnWidth') public columnWidth: ColsMetrics;
   @Input('scrollable') public scrollable:boolean;
-
 
   constructor(
     private element:ElementRef,
@@ -34,10 +37,8 @@ export class StickyHeaderDirective implements AfterViewInit{
 
   ngAfterViewInit():void{
     this.innerWidth = window.innerWidth;
-    console.log('que chow?');
-    console.log(this.innerWidth);
+
     setTimeout(()=>{
-      this.windowWidth = window.innerWidth;
 
       this.headers   = this.element.nativeElement.getElementsByTagName('TR');
       this.hasHeader = this.headers.length > 0;
@@ -51,14 +52,17 @@ export class StickyHeaderDirective implements AfterViewInit{
         this.callFixed     = Math.round(this.headerTop - this.stickyTop + window.pageYOffset);
         this.colElements   = this.element.nativeElement.getElementsByTagName('COL');
 
+        console.log('initial width:',this.innerWidth);
+        console.log('intiial tableWidth: ',this.tableWidth);
+
         if(this.scrollable){
-          if(Object.keys(this.colElements).length == 0){
-            console.log('initial width:',this.windowWidth);
-            console.log('tableWidth: ',this.tableWidth);
+          this.isBigger = (this.innerWidth>this.tableWidth)?true:false;
+          if(Object.keys(this.colElements).length == 0 && !this.isBigger){
             this.makeColumns();
           }else{
-            this.setBodyColumns();
-            this.setColumnWidth();
+            this.setTrWidth();
+            // this.setBodyColumns();
+            // this.setColumnWidth();
           }
         }
       }
@@ -80,6 +84,22 @@ export class StickyHeaderDirective implements AfterViewInit{
       this.setBodyColumns();
       this.setColumnWidth();
     }
+  }
+  private setTrWidth(){
+    this.makeColumns();
+    let tableWidth:number = Math.round(this.headers[1].getBoundingClientRect().right);
+    let tableRow = this.headers;
+    this.trWidth = `${tableWidth-this.childEleCount}px`;
+    for(let i in tableRow[1].children){
+      console.log(tableRow[1].children[i]);
+    }
+    for(let i in tableRow){
+      let trElement = tableRow[i];
+      if(undefined != trElement.style){
+        trElement.style.setProperty('width', this.trWidth);
+      }
+    }
+
   }
   private setWidth(metrics:object, count:number):number{
     let width:number = 0;
@@ -147,13 +167,13 @@ export class StickyHeaderDirective implements AfterViewInit{
     this.setStyleAttribute(this.colElements, {'width': width}, this.bodyColsMetrics);
   }
   @HostListener('window:resize', ['$event'])
-  private onResize(event) {
-    this.windowWidth = window.innerWidth;
-    console.log('onResize width:',this.windowWidth);
+  private onResize(event):void {
+    this.innerWidth = window.innerWidth;
+    console.log('onResize width:',this.innerWidth);
     console.log('tableWidth: ',this.tableWidth);
   }
   @HostListener("window:scroll", ['$event'])
-  private handleScroll($event:Event){
+  private handleScroll($event:Event):void{
     this.scroll = Math.round($event.srcElement.children[0].scrollTop);
     if(this.hasHeader && this.scrollable){
       if(this.scroll >= this.callFixed){
@@ -165,7 +185,8 @@ export class StickyHeaderDirective implements AfterViewInit{
   }
   private setSticky():void{
     this.fixedState = StickyState.fixed;
-    let width = `${this.tableWidth+1}px`;
+    console.log(this.isBigger);
+    let width = (this.isBigger)?this.trWidth:`${this.tableWidth+1}px`;
     let stickyTop = `${this.stickyTop}px`;
     let fixedStyles:object = {
       position:'fixed',
@@ -177,7 +198,7 @@ export class StickyHeaderDirective implements AfterViewInit{
     }
     let unfixedStyles:object = {
       position:'static',
-      'width':'auto',
+      'width':(this.isBigger)?this.trWidth:'auto',
       display:'table-row'
     }
     Object.keys(unfixedStyles).forEach((key:string)=>{
@@ -192,10 +213,10 @@ export class StickyHeaderDirective implements AfterViewInit{
   }
   private unsetSticky():void{
     this.fixedState = StickyState.noFixed;
-    let width = `${this.tableWidth+1}px`;
+    let width = (this.isBigger)?this.trWidth:`${this.tableWidth+1}px`;
     let setStyles:object = {
       position:'static',
-      'width':'auto',
+      'width':(this.isBigger)?this.trWidth:'auto',
       display:'table-row'
     }
     let unsetStyles:object = {
