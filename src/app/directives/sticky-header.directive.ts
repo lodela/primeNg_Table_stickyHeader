@@ -50,17 +50,12 @@ export class StickyHeaderDirective implements AfterViewInit{
         this.callFixed     = Math.round(this.headerTop - this.stickyTop + window.pageYOffset);
         this.colElements   = this.element.nativeElement.getElementsByTagName('COL');
 
-        console.log('initial width:',this.innerWidth);
-        console.log('intiial tableWidth: ',this.tableWidth);
-
         if(this.scrollable){
           this.isBigger = (this.innerWidth>this.tableWidth)?true:false;
           if(Object.keys(this.colElements).length == 0 && !this.isBigger){
             this.makeColumns();
           }else{
             this.setTrWidth();
-            // this.setBodyColumns();
-            // this.setColumnWidth();
           }
         }
       }
@@ -88,16 +83,12 @@ export class StickyHeaderDirective implements AfterViewInit{
     let tableWidth:number = Math.round(this.headers[1].getBoundingClientRect().right);
     let tableRow = this.headers;
     this.trWidth = `${tableWidth-this.childEleCount}px`;
-    for(let i in tableRow[1].children){
-      console.log(this.headers);
-    }
     for(let i in tableRow){
       let trElement = tableRow[i];
       if(undefined != trElement.style){
         trElement.style.setProperty('width', this.trWidth);
       }
     }
-
   }
   private setWidth(metrics:object, count:number):number{
     let width:number = 0;
@@ -167,8 +158,15 @@ export class StickyHeaderDirective implements AfterViewInit{
   @HostListener('window:resize', ['$event'])
   private onResize(event):void {
     this.innerWidth = window.innerWidth;
+    this.isBigger = (this.innerWidth>this.tableWidth)?true:false;
+    console.log(this.isBigger);
+    console.log(this.trWidth);
+    let _tableWidth = (Math.round(this.headers[1].getBoundingClientRect().right)-15),px;
+    this.trWidth = `${_tableWidth}px`;
+    this.header.style.setProperty('width', `${_tableWidth}px`);
     console.log('onResize width:',this.innerWidth);
     console.log('tableWidth: ',this.tableWidth);
+    console.log('newTableWidth: ', `${_tableWidth}px`);
   }
   @HostListener("window:scroll", ['$event'])
   private handleScroll($event:Event):void{
